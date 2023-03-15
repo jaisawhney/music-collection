@@ -32,7 +32,7 @@ export async function syncMedia() {
         const artist = await findOrCreateArtist(metadata);
         const album = await findOrCreateAlbum(artist, metadata);
 
-        if (!album.thumbnail) await createAlbumThumbnail(artist, metadata);
+        if (!album.thumbnail) await createAlbumThumbnail(album, metadata);
 
         await findOrCreateSong(artist, album, mediaPath, hash, metadata);
     }
@@ -82,20 +82,20 @@ async function findOrCreateAlbum(
 }
 
 async function createAlbumThumbnail(
-    artist: { id: number },
+    album: { id: number, name: string, artistId: number},
     metadata: ICommonTagsResult,
 ) {
     const thumbnail = selectCover(metadata.picture);
     if (!thumbnail) return;
 
     const fileExtension = mime.extension(thumbnail.format);
-    const filePath = path.join(basePath, `cover_${metadata.album}.${fileExtension}`);
+    const filePath = path.join(basePath, `cover_${album.name}_${album.id}.${fileExtension}`);
     fs.writeFileSync(filePath, thumbnail.data, 'binary');
 
     return await prisma.album.update({
         where: {
             artistIdAndName: {
-                artistId: artist.id,
+                artistId: album.artistId,
                 name: metadata.album as string,
             },
         },

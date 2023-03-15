@@ -10,10 +10,10 @@ export async function createSong(req: Request, res: Response) {
 }
 
 export async function getSong(req: Request, res: Response) {
-    const id: number = parseInt(req.params.songId);
+    const mediaHash: string = req.params.songId;
     const song = await prisma.song.findUnique({
         where: {
-            id: id,
+            mediaHash: mediaHash,
         },
         select: { id: true, mediaHash: true, track: true, title: true, artistId: true, albumId: true },
     });
