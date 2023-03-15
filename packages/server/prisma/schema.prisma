@@ -20,6 +20,7 @@ model Song {
   artist     Artist     @relation(fields: [artistId], references: [id], onDelete: Cascade)
   albumId    Int
   album      Album      @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  genres     Genre[]
 }
 
 model Artist {
@@ -32,12 +33,17 @@ model Artist {
 model Album {
   id         Int        @id @default(autoincrement())
   name       String
-  genre      String?
-  year       String?
+  year       Int?
   thumbnail  String?
   songs      Song[]
   artistId   Int
   artist     Artist     @relation(fields: [artistId], references: [id], onDelete: Cascade)
 
-  @@unique([artistId, name], name: "artistIdName")
+  @@unique([artistId, name], name: "artistIdAndName")
+}
+
+model Genre {
+  id         Int        @id @default(autoincrement())
+  name       String     @unique
+  songs      Song[]
 }
