@@ -13,7 +13,8 @@ datasource db {
 model Song {
   id         Int        @id @default(autoincrement())
   mediaPath  String
-  track      Int
+  mediaHash  String     @unique
+  track      Int?
   title      String
   artistId   Int
   artist     Artist     @relation(fields: [artistId], references: [id], onDelete: Cascade)
@@ -23,13 +24,20 @@ model Song {
 
 model Artist {
   id         Int        @id @default(autoincrement())
-  name       String
+  name       String     @unique
   songs      Song[]
+  albums     Album[]
 }
 
 model Album {
   id         Int        @id @default(autoincrement())
   name       String
-  thumbnail  String
+  genre      String?
+  year       String?
+  thumbnail  String?
   songs      Song[]
+  artistId   Int
+  artist     Artist     @relation(fields: [artistId], references: [id], onDelete: Cascade)
+
+  @@unique([artistId, name], name: "artistIdName")
 }
