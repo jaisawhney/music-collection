@@ -5,16 +5,14 @@ interface PlayerState {
     duration: number;
     currentTime: number;
     isPlaying: boolean;
-    isPaused: boolean;
     isMuted: boolean;
 }
 
 const initialState: PlayerState = {
-    volume: 50,
+    volume: 100,
     duration: 0, // Song duration
     currentTime: 0, // <Audio> element .currentTime
     isPlaying: false,
-    isPaused: false,
     isMuted: false,
 };
 
@@ -22,13 +20,8 @@ export const playerSlice = createSlice({
     name: 'mediaPlayer',
     initialState,
     reducers: {
-        play: (state) => {
-            state.isPlaying = true;
-            state.isPaused = false;
-        },
-        pause: (state) => {
-            state.isPlaying = false;
-            state.isPaused = true;
+        setIsPlaying: (state, action) => {
+            state.isPlaying = action.payload;
         },
         setDuration: (state, action) => {
             state.duration = action.payload;
@@ -45,6 +38,6 @@ export const playerSlice = createSlice({
     },
 });
 
-export const { play, pause, setVolume, setMuted } = playerSlice.actions;
+export const { setIsPlaying } = playerSlice.actions;
 
 export default playerSlice.reducer;

@@ -1,22 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
-
-interface Song {
-    id: number;
-    mediaPath: string;
-    mediaHash: string;
-    duration: number;
-    track?: number;
-}
+import { Song } from '../../common/types';
 
 interface QueueState {
     queue: Song[]; // queue[queueIdx] is the current song
-    queueIdx: null | number;
+    queueIdx: number;
     isLooped: boolean;
 }
 
 const initialState: QueueState = {
     queue: [],
-    queueIdx: null,
+    queueIdx: -1,
     isLooped: false,
 };
 
@@ -24,14 +17,30 @@ export const queueSlice = createSlice({
     name: 'mediaQueue',
     initialState,
     reducers: {
-        add: (state, action) => {
-            state.queue.push(action.payload);
+        setCurrentSong: (state, action) => {
+            state.queueIdx = state.queue.findIndex(track => track.id == action.payload.id); // -1 or track index
         },
-        remove: (state, action) => {
-            state.queue.splice(action.payload, 1);
-            if (!state.queue.length) state.queueIdx = null;
+        addSongToQueue: (state, action) => {
+            // Prevent duplicates
+            const songIdx = state.queue.findIndex(track => track.id == action.payload.id);
+
+            if (songIdx === -1) {
+                // Add if not a duplicate
+                state.queue.push(action.payload);
+                state.queueIdx = state.queue.length - 1;
+            } else {
+                // Play if a duplicate
+                state.queueIdx = songIdx;
+            }
         },
-        setIdx: (state, action) => {
+        removeSongFromQueue: (state, action) => {
+            const songIdx = state.queue.findIndex(track => track.id == action.payload.id);
+            if (songIdx !== -1) {
+                // Remove song if it exists
+                state.queue.splice(songIdx, 1);
+            }
+        },
+        setQueueIdx: (state, action) => {
             state.queueIdx = action.payload;
         },
         setIsLooped: (state, action) => {
@@ -40,6 +49,6 @@ export const queueSlice = createSlice({
     },
 });
 
-export const { add, remove, setIdx, setIsLooped } = queueSlice.actions;
+export const { setCurrentSong, addSongToQueue, setQueueIdx } = queueSlice.actions;
 
 export default queueSlice.reducer;
