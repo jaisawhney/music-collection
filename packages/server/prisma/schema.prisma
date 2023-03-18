@@ -15,12 +15,14 @@ model Song {
   mediaPath  String
   mediaHash  String     @unique
   track      Int?
+  duration   Int
   title      String
   artistId   Int
   artist     Artist     @relation(fields: [artistId], references: [id], onDelete: Cascade)
   albumId    Int
   album      Album      @relation(fields: [albumId], references: [id], onDelete: Cascade)
   genres     Genre[]
+  playlists  Playlist[]
 }
 
 model Artist {
@@ -46,4 +48,22 @@ model Genre {
   id         Int        @id @default(autoincrement())
   name       String     @unique
   songs      Song[]
+}
+
+model User {
+  id         Int        @id @default(autoincrement())
+  name       String     @unique
+  playlists  Playlist[]
+}
+
+model Playlist {
+  id         Int        @id @default(autoincrement())
+  userId     Int
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  songs      Song[]
+}
+
+model Setting {
+  name       String     @id
+  value      String
 }
