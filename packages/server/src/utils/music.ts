@@ -1,40 +1,40 @@
 import { PrismaClient } from '@prisma/client';
-import { ICommonTagsResult, parseBuffer, selectCover } from 'music-metadata';
+import { IAudioMetadata, parseBuffer, selectCover } from 'music-metadata';
+import { fileURLToPath } from 'url';
+
+import path from 'path';
 import * as fs from 'fs';
 
 import mime from 'mime-types';
 import crypto from 'crypto';
-import path from 'path';
 import glob from 'glob';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const prisma = new PrismaClient();
 const basePath = process.env.MEDIA_PATH as string;
 
-/*
-TODO: Refactor code
-TODO: Split into files
-*/
 
 export async function syncMedia() {
-    const mediaFiles = getMediaFiles(basePath);
-    for (const mediaPath of mediaFiles) {
-        const fileBuffer = fs.readFileSync(mediaPath);
-
-        // Extract the music metadata
-        const metadata: ICommonTagsResult = (await parseBuffer(fileBuffer)).common;
-
-        if (!metadata.title || !metadata.album) continue;
-
-        // Create a unique identifier for the file
+    const files = getMediaFiles(basePath);
+    for (const file of files) {
+        // Load the file into a buffer and create a unique identifier for the file
+        const fileBuffer: Buffer = fs.readFileSync(file);
         const hash: string = createHash(fileBuffer);
 
-        // Record the media in the database
+        // Extract the music metadata by parsing the file buffer
+        const metadata: IAudioMetadata = await parseBuffer(fileBuffer, undefined, { duration: true });
+
+        if (!metadata.common.title || !metadata.common.album) continue;
+
+        // Add the media metadata to the database
         const artist = await findOrCreateArtist(metadata);
         const album = await findOrCreateAlbum(artist, metadata);
 
+        // Extract the album cover if not already present
         if (!album.thumbnail) await createAlbumThumbnail(album, metadata);
 
-        await findOrCreateSong(artist, album, mediaPath, hash, metadata);
+        await findOrCreateSong(artist, album, file, hash, metadata);
     }
 }
 
@@ -49,58 +49,62 @@ function createHash(buffer: Buffer) {
         .digest('hex');
 }
 
-async function findOrCreateArtist(metadata: ICommonTagsResult) {
+async function findOrCreateArtist(metadata: IAudioMetadata) {
     return await prisma.artist.upsert({
         where: {
-            name: metadata.artist,
+            name: metadata.common.artist,
         },
         update: {},
         create: {
-            name: metadata.artist || 'Unknown',
+            name: metadata.common.artist || 'Unknown',
         },
     });
 }
 
 async function findOrCreateAlbum(
     artist: { id: number },
-    metadata: ICommonTagsResult,
+    metadata: IAudioMetadata,
 ) {
     return await prisma.album.upsert({
         where: {
             artistIdAndName: {
                 artistId: artist.id,
-                name: metadata.album as string,
+                name: metadata.common.album as string,
             },
         },
         update: {},
         create: {
-            name: metadata.album as string,
-            year: metadata.year,
+            name: metadata.common.album as string,
+            year: metadata.common.year,
             artistId: artist.id,
         },
     });
 }
 
 async function createAlbumThumbnail(
-    album: { id: number, name: string, artistId: number},
-    metadata: ICommonTagsResult,
+    album: { id: number, name: string, artistId: number },
+    metadata: IAudioMetadata,
 ) {
-    const thumbnail = selectCover(metadata.picture);
+    // Check if the metadata includes a thumbnail
+    const thumbnail = selectCover(metadata.common.picture);
     if (!thumbnail) return;
 
+    // Store the thumbnail on the server
     const fileExtension = mime.extension(thumbnail.format);
-    const filePath = path.join(basePath, `cover_${album.name}_${album.id}.${fileExtension}`);
+    const uploadsPath = path.join(__dirname, '../public', 'uploads', 'covers');
+    const filePath = path.join(uploadsPath, `${album.id}.${fileExtension}`);
+
     fs.writeFileSync(filePath, thumbnail.data, 'binary');
 
     return await prisma.album.update({
         where: {
             artistIdAndName: {
                 artistId: album.artistId,
-                name: metadata.album as string,
+                name: metadata.common.album as string,
             },
         },
         data: {
-            thumbnail: filePath,
+            thumbnail: `/uploads/covers/${album.id}.${fileExtension}`,
         },
     });
 }
@@ -110,7 +114,7 @@ async function findOrCreateSong(
     album: { id: number },
     mediaPath: string,
     hash: string,
-    metadata: ICommonTagsResult,
+    metadata: IAudioMetadata,
 ) {
 
     return await prisma.song.upsert({
@@ -121,8 +125,9 @@ async function findOrCreateSong(
         create: {
             mediaPath: mediaPath,
             mediaHash: hash,
-            title: metadata.title as string,
-            track: metadata.track?.no,
+            title: metadata.common.title as string,
+            track: metadata.common.track?.no,
+            duration: Math.round(metadata.format.duration || 0),
             artist: {
                 connect: {
                     id: artist.id,
@@ -134,7 +139,7 @@ async function findOrCreateSong(
                 },
             },
             genres: {
-                connectOrCreate: (metadata.genre || []).map(genre => (
+                connectOrCreate: (metadata.common.genre || []).map((genre) => (
                     {
                         where: { name: genre },
                         create: { name: genre },
