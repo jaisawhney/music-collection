@@ -2,13 +2,13 @@ import { createSlice } from '@reduxjs/toolkit';
 import { Song } from '../../common/types';
 
 interface QueueState {
-    queue: Song[]; // queue[queueIdx] is the current song
+    queue: Song[];
     queueIdx: number;
     isLooped: boolean;
 }
 
 const initialState: QueueState = {
-    queue: [],
+    queue: [], // queue[queueIdx] is the current song
     queueIdx: -1,
     isLooped: false,
 };
@@ -36,8 +36,15 @@ export const queueSlice = createSlice({
         removeSongFromQueue: (state, action) => {
             const songIdx = state.queue.findIndex(track => track.id == action.payload.id);
             if (songIdx !== -1) {
-                // Remove song if it exists
                 state.queue.splice(songIdx, 1);
+
+                if (songIdx <= state.queueIdx) {
+                    // Removed song was before the current index
+                    state.queueIdx -= 1;
+                } else if (songIdx === state.queue.length) {
+                    // Removed song was the last in the queue
+                    state.queueIdx = state.queue.length - 1;
+                }
             }
         },
         setQueueIdx: (state, action) => {
@@ -49,6 +56,6 @@ export const queueSlice = createSlice({
     },
 });
 
-export const { setCurrentSong, addSongToQueue, setQueueIdx } = queueSlice.actions;
+export const { setCurrentSong, addSongToQueue, removeSongFromQueue, setQueueIdx, setIsLooped } = queueSlice.actions;
 
 export default queueSlice.reducer;

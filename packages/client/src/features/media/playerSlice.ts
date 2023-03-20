@@ -9,7 +9,7 @@ interface PlayerState {
 }
 
 const initialState: PlayerState = {
-    volume: 100,
+    volume: 50,
     duration: 0, // Song duration
     currentTime: 0, // <Audio> element .currentTime
     isPlaying: false,
@@ -38,6 +38,6 @@ export const playerSlice = createSlice({
     },
 });
 
-export const { setIsPlaying } = playerSlice.actions;
+export const { setIsPlaying, setDuration, setCurrentTime, setVolume, setMuted } = playerSlice.actions;
 
 export default playerSlice.reducer;
