@@ -5,12 +5,14 @@ interface QueueState {
     queue: Song[];
     queueIdx: number;
     isLooped: boolean;
+    isShuffled: boolean;
 }
 
 const initialState: QueueState = {
     queue: [], // queue[queueIdx] is the current song
     queueIdx: -1,
     isLooped: false,
+    isShuffled: false,
 };
 
 export const queueSlice = createSlice({
@@ -27,7 +29,6 @@ export const queueSlice = createSlice({
             if (songIdx === -1) {
                 // Add if not a duplicate
                 state.queue.push(action.payload);
-                state.queueIdx = state.queue.length - 1;
             } else {
                 // Play if a duplicate
                 state.queueIdx = songIdx;

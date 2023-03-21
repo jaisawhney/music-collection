@@ -1,42 +1,50 @@
-import Controls from './Controls';
-import ProgressBar from './ProgressBar';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../app/store';
-import { useEffect, useRef, useState } from 'react';
 import { Song } from '../../common/types';
-import { useDispatch } from 'react-redux';
-import { setIsPlaying } from '../../features/media/playerSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { ChangeEvent, useEffect, useRef } from 'react';
+
+import { RootState } from '../../app/store';
+import { setCurrentTime, setDuration, setIsPlaying } from '../../features/media/playerSlice';
 import { setQueueIdx } from '../../features/media/queueSlice';
+
+import CurrentTrack from './CurrentTrack';
 
 export default function MediaPlayer() {
     const dispatch = useDispatch();
 
-    const [currentSong, setCurrentSong] = useState<null | Song>(null);
+    const queue: Song[] = useSelector((state: RootState) => state.queue.queue);
+    const queueIdx: number = useSelector((state: RootState) => state.queue.queueIdx);
 
-    const queue = useSelector((state: RootState) => state.queue.queue);
-    const queueIdx = useSelector((state: RootState) => state.queue.queueIdx);
+    const currentSong: Song = queue[queueIdx];
 
-    const playerRef = useRef(null);
+    const playerRef = useRef<HTMLAudioElement>(null);
 
-    // Handle queue updates
+    // On queue updates
     useEffect(() => {
-        const player: any = playerRef.current;
+        const player: HTMLAudioElement = playerRef.current as HTMLAudioElement;
 
         if (queueIdx !== -1) {
-            // Play the song in the queue
+            // Get the current song in the queue
             const song = queue[queueIdx];
-            setCurrentSong(song);
 
+            // Start the stream
             player.src = `/api/stream/${song.mediaHash}`;
             player.load();
             player.play();
-        } else {
-            // Stop the audio player
-            player.src = '';
-            player.pause();
-            setCurrentSong(null);
+            dispatch(setDuration(song.duration));
         }
-    }, [queue, queueIdx]);
+    }, [queueIdx]);
+
+    function onPlay() {
+        dispatch(setIsPlaying(true));
+    }
+
+    function onPause() {
+        dispatch(setIsPlaying(false));
+    }
+
+    function onTimeUpdate(e: ChangeEvent<HTMLAudioElement>) {
+        dispatch(setCurrentTime(e.target.currentTime));
+    }
 
     function handleSongEnd() {
         const nextIdx = queueIdx + 1;
@@ -46,20 +54,21 @@ export default function MediaPlayer() {
             return dispatch(setQueueIdx(nextIdx));
 
         // End of queue
-        dispatch(setQueueIdx(-1));
-        dispatch(setIsPlaying(true));
+        dispatch(setIsPlaying(false));
     }
 
-    /*
-        TODO: Implement controls
-        TODO: Implement progress bar
-     */
-
     return (
-        <>
-            <audio onEnded={handleSongEnd} id={'audio'} ref={playerRef} />
-            <ProgressBar />
-            <Controls />
-        </>
+        <div className={'py-2 px-5 w-full h-[75px] sticky bottom-0 flex justify-between items-center bg-white border'}>
+            <audio
+                id={'audio'}
+                ref={playerRef}
+                onPlay={onPlay}
+                onPause={onPause}
+                onEnded={handleSongEnd}
+                onTimeUpdate={onTimeUpdate}
+            />
+
+            <CurrentTrack currentSong={currentSong} />
+        </div>
     );
 }
