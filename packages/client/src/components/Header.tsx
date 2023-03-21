@@ -13,7 +13,7 @@ export default function Header() {
 
     return (
         <div className={clsx(
-            'p-4 w-full text-center flex justify-center gap-5',
+            'p-4 flex justify-center gap-5',
             'sm:gap-24',
         )}>
             <NavLink to={`/`} className={test}>

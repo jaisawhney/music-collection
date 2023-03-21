@@ -26,6 +26,9 @@ export async function getAlbumSongs(req: Request, res: Response) {
         where: {
             albumId: parseInt(id),
         },
+        orderBy: {
+            track: 'asc'
+        }
     });
     res.status(200).json(songs);
 }
