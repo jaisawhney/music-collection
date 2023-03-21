@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { clsx } from 'clsx';
 
 import Thumbnail from '../Thumbnail';
-import Songs from '../Songs';
+import AlbumSongs from '../AlbumSongs';
 
 export default function Album() {
 
@@ -42,8 +42,8 @@ export default function Album() {
     return (
         <div className={'max-w-[750px] w-full'}>
             <div className={clsx(
-                'flex flex-wrap justify-center',
-                'sm:justify-start',
+                'flex flex-wrap content-center flex-col',
+                'sm:justify-start sm:flex-row',
             )}>
                 <Thumbnail image={album.thumbnail} className={'w-[175px] h-[175px]'} />
                 <div className={clsx(
@@ -54,7 +54,7 @@ export default function Album() {
                     <p className={'text-gray-400'}>{artist.name}</p>
                 </div>
             </div>
-            <Songs songs={songs} album={album} artist={artist} />
+            <AlbumSongs songs={songs} album={album} artist={artist} />
         </div>
     );
 }
