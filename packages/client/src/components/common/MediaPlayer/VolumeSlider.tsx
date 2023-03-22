@@ -1,8 +1,8 @@
 import { useDispatch } from 'react-redux';
-import { setVolume } from '../../features/media/playerSlice';
+import { setVolume } from '../../../features/media/playerSlice';
 
-import { ReactComponent as VolumeIcon } from '../../assets/icons/volume.svg';
-import { ReactComponent as MuteIcon } from '../../assets/icons/mute.svg';
+import { ReactComponent as VolumeIcon } from '../../../assets/icons/volume.svg';
+import { ReactComponent as MuteIcon } from '../../../assets/icons/mute.svg';
 
 interface Props {
     volume: number;

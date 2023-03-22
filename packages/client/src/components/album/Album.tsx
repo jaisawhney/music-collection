@@ -2,8 +2,8 @@ import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { clsx } from 'clsx';
 
-import Thumbnail from '../Thumbnail';
-import AlbumSongs from '../AlbumSongs';
+import Thumbnail from '../common/Thumbnail';
+import AlbumSongs from './AlbumSongs';
 
 export default function Album() {
 
@@ -51,7 +51,7 @@ export default function Album() {
                     'sm:ml-4 sm:text-left',
                 )}>
                     <h1 className={'font-semibold text-xl'}>{album.name}</h1>
-                    <p className={'text-gray-400'}>{artist.name}</p>
+                    <p className={'text-gray-500'}>{artist.name}</p>
                 </div>
             </div>
             <AlbumSongs songs={songs} album={album} artist={artist} />

@@ -1,8 +1,9 @@
 import { Route, Routes } from 'react-router-dom';
-import Home from './Pages/Home';
-import Album from './Pages/Album';
-import Library from './Pages/Library';
-import Settings from './Pages/Settings';
+
+import Home from './home/Home';
+import Album from './album/Album';
+import Library from './library/Library';
+import Settings from './settings/Settings';
 
 export default function Content() {
     return (

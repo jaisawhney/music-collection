@@ -1,7 +1,7 @@
-import { Album } from '../common/types';
+import { Album } from '../../common/types';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import Thumbnail from './Thumbnail';
+import Thumbnail from '../common/Thumbnail';
 
 
 
@@ -25,7 +25,7 @@ export default function AlbumCard(props: { data: Album }) {
             <Link to={`/albums/${album.id}`}>
                 <Thumbnail image={album.thumbnail} className={'mb-1'} />
                 <p className={'font-semibold'}>{album.name}</p>
-                <p className={'text-gray-400'}>{artist.name}</p>
+                <p className={'text-gray-500'}>{artist.name}</p>
             </Link>
         </div>
     );

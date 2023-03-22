@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
-import AlbumGrid from '../AlbumGrid';
-import Thumbnail from '../Thumbnail';
+import AlbumGrid from './AlbumGrid';
+import Thumbnail from '../common/Thumbnail';
 import { Song } from '../../common/types';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
@@ -22,7 +22,7 @@ function Home() {
                     />
                     <div className={'ml-4 flex flex-col'}>
                         <h1 className={'font-semibold text-xl'}>{song.title || '...'}</h1>
-                        <p className={'text-gray-400'}>{song.artist?.name || '...'}</p>
+                        <p className={'text-gray-500'}>{song.artist?.name || '...'}</p>
                     </div>
                 </div>
             )}

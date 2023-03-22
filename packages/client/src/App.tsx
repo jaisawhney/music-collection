@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Content from './components/Content';
-import MediaPlayer from './components/MediaPlayer/MediaPlayer';
-import Header from './components/Header';
+import MediaPlayer from './components/common/MediaPlayer/MediaPlayer';
+import Header from './components/common/Header';
 import { BrowserRouter } from 'react-router-dom';
 
 const queryClient = new QueryClient();

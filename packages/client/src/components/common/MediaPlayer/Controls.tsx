@@ -1,13 +1,13 @@
-import { Song } from '../../common/types';
+import { Song } from '../../../common/types';
 import { useDispatch } from 'react-redux';
 
-import { setQueueIdx } from '../../features/media/queueSlice';
-import { setIsPlaying } from '../../features/media/playerSlice';
+import { setQueueIdx } from '../../../features/media/queueSlice';
+import { setIsPlaying } from '../../../features/media/playerSlice';
 
-import { ReactComponent as BackwardIcon } from '../../assets/icons/backward.svg';
-import { ReactComponent as ForwardIcon } from '../../assets/icons/forward.svg';
-import { ReactComponent as PauseIcon } from '../../assets/icons/pause.svg';
-import { ReactComponent as PlayIcon } from '../../assets/icons/play.svg';
+import { ReactComponent as BackwardIcon } from '../../../assets/icons/backward.svg';
+import { ReactComponent as ForwardIcon } from '../../../assets/icons/forward.svg';
+import { ReactComponent as PauseIcon } from '../../../assets/icons/pause.svg';
+import { ReactComponent as PlayIcon } from '../../../assets/icons/play.svg';
 
 interface Props {
     isPlaying: boolean;

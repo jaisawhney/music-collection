@@ -1,11 +1,11 @@
-import { Song } from '../../common/types';
+import { Song } from '../../../common/types';
 import { clsx } from 'clsx';
 import { useSelector, useDispatch } from 'react-redux';
 import { ChangeEvent, useEffect, useRef } from 'react';
 
-import { RootState } from '../../app/store';
-import { setCurrentTime, setDuration, setIsPlaying } from '../../features/media/playerSlice';
-import { setQueueIdx } from '../../features/media/queueSlice';
+import { RootState } from '../../../app/store';
+import { setCurrentTime, setDuration, setIsPlaying } from '../../../features/media/playerSlice';
+import { setQueueIdx } from '../../../features/media/queueSlice';
 
 import CurrentTrack from './CurrentTrack';
 import Controls from './Controls';

@@ -1,8 +1,8 @@
 import { ChangeEvent, RefObject } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { formatSongTime } from '../../utils/formatSongTime';
-import { setCurrentTime } from '../../features/media/playerSlice';
+import { formatSongTime } from '../../../utils/formatSongTime';
+import { setCurrentTime } from '../../../features/media/playerSlice';
 
 interface Props {
     duration: number;

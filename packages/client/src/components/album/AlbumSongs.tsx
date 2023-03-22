@@ -1,9 +1,9 @@
-import { Album, Artist, Song } from '../common/types';
-import { addSongToQueue, setCurrentSong } from '../features/media/queueSlice';
+import { Album, Artist, Song } from '../../common/types';
+import { addSongToQueue, setCurrentSong } from '../../features/media/queueSlice';
 import { useDispatch } from 'react-redux';
 
-import { ReactComponent as OptionsIcon } from '../assets/icons/vertical-ellipsis.svg';
-import { formatSongTime } from '../utils/formatSongTime';
+import { ReactComponent as OptionsIcon } from '../../assets/icons/vertical-ellipsis.svg';
+import { formatSongTime } from '../../utils/formatSongTime';
 
 interface Props {
     songs: Song[];

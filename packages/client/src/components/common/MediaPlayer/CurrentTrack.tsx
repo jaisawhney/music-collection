@@ -1,4 +1,4 @@
-import { Song } from '../../common/types';
+import { Song } from '../../../common/types';
 import Thumbnail from '../Thumbnail';
 
 interface Props {

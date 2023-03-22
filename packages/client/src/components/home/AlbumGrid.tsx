@@ -1,6 +1,6 @@
 import AlbumCard from './AlbumCard';
 import { useQuery } from '@tanstack/react-query';
-import { Album } from '../common/types';
+import { Album } from '../../common/types';
 
 export default function AlbumGrid() {
     const { data: albums, status } = useQuery(['albums'], fetchAlbums);
