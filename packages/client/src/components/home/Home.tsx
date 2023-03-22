@@ -1,5 +1,5 @@
 import { clsx } from 'clsx';
-import AlbumGrid from './AlbumGrid';
+import AlbumGrid from '../library/AlbumGrid';
 import Thumbnail from '../common/Thumbnail';
 import { Song } from '../../common/types';
 import { useSelector } from 'react-redux';

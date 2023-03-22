@@ -21,7 +21,6 @@ export default function Header() {
             <NavLink to={`/library`} className={navLinkClassnames}>
                 <p>Library</p>
             </NavLink>
-
             <NavLink to={`/settings`} className={navLinkClassnames}>
                 <p>Settings</p>
             </NavLink>

@@ -16,11 +16,10 @@ export default function AlbumGrid() {
     if (status === 'error')
         return <p>Error</p>;
 
-
     return (
         <>
             {albums.map((album: Album) => (
-                <AlbumCard  key={album.id} data={album} />
+                <AlbumCard key={album.id} data={album} />
             ))}
         </>
     );
