@@ -50,6 +50,7 @@ export const queueSlice = createSlice({
         },
         clearQueue: (state) => {
             state.queue = [];
+            state.queueIdx = -1;
         },
         setQueueIdx: (state, action) => {
             state.queueIdx = action.payload;

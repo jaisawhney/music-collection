@@ -1,4 +1,5 @@
 import { Song } from '../../common/types';
+import { clsx } from 'clsx';
 import { useSelector, useDispatch } from 'react-redux';
 import { ChangeEvent, useEffect, useRef } from 'react';
 
@@ -9,8 +10,7 @@ import { setQueueIdx } from '../../features/media/queueSlice';
 import CurrentTrack from './CurrentTrack';
 import Controls from './Controls';
 import SeekBar from './SeekBar';
-
-// TODO: Style
+import VolumeSlider from './VolumeSlider';
 
 export default function MediaPlayer() {
     const dispatch = useDispatch();
@@ -18,6 +18,7 @@ export default function MediaPlayer() {
     const isPlaying: boolean = useSelector((state: RootState) => state.player.isPlaying);
     const duration: number = useSelector((state: RootState) => state.player.duration);
     const currentTime: number = useSelector((state: RootState) => state.player.currentTime);
+    const volume: number = useSelector((state: RootState) => state.player.volume);
 
     const queue: Song[] = useSelector((state: RootState) => state.queue.queue);
     const queueIdx: number = useSelector((state: RootState) => state.queue.queueIdx);
@@ -30,7 +31,7 @@ export default function MediaPlayer() {
     useEffect(() => {
         if (!audioRef.current) return;
 
-        if (queueIdx !== -1) {
+        if (queueIdx >= 0) {
             // Get the current song in the queue
             const song = queue[queueIdx];
 
@@ -42,13 +43,23 @@ export default function MediaPlayer() {
         }
     }, [queueIdx]);
 
-    function onPlay() {
-        dispatch(setIsPlaying(true));
-    }
+    // On pause/resume
+    useEffect(() => {
+        if (!audioRef.current) return;
 
-    function onPause() {
-        dispatch(setIsPlaying(false));
-    }
+        if (isPlaying) {
+            audioRef.current.play();
+        } else {
+            audioRef.current.pause();
+        }
+    }, [isPlaying]);
+
+    // On volume change
+    useEffect(() => {
+        if (!audioRef.current) return;
+
+        audioRef.current.volume = volume / 100;
+    }, [volume]);
 
     function onTimeUpdate(e: ChangeEvent<HTMLAudioElement>) {
         dispatch(setCurrentTime(e.target.currentTime));
@@ -65,31 +76,38 @@ export default function MediaPlayer() {
         dispatch(setIsPlaying(false));
     }
 
+    // TODO: Fix mobile layout
     return (
-        <div className={'py-2 px-5 w-full h-[75px] sticky bottom-0 flex justify-between items-center bg-white border'}>
+        <div className={clsx(
+            'py-2 px-5 w-full h-[75px] sticky bottom-0 flex justify-between items-center bg-white border',
+            'sm:px-10',
+        )}>
             <audio
                 id={'audio'}
                 ref={audioRef}
-                onPlay={onPlay}
-                onPause={onPause}
+                onPlay={() => dispatch(setIsPlaying(true))}
+                onPause={() => dispatch(setIsPlaying(false))}
                 onEnded={handleSongEnd}
                 onTimeUpdate={onTimeUpdate}
             />
 
             <CurrentTrack currentSong={currentSong} />
 
-            <SeekBar
-                duration={duration}
-                currentTime={currentTime}
-                audioRef={audioRef}
-            />
+            <div className={'flex flex-col items-center w-full max-w-[500px]'}>
+                <Controls
+                    isPlaying={isPlaying}
+                    queue={queue}
+                    queueIdx={queueIdx}
+                />
 
-            <Controls
-                isPlaying={isPlaying}
-                queue={queue}
-                queueIdx={queueIdx}
-                audioRef={audioRef}
-            />
+                <SeekBar
+                    duration={duration}
+                    currentTime={currentTime}
+                    audioRef={audioRef}
+                />
+            </div>
+
+            <VolumeSlider volume={volume} />
         </div>
     );
 }

@@ -1,26 +1,27 @@
 import { Song } from '../../common/types';
-import { RefObject } from 'react';
 import { useDispatch } from 'react-redux';
+
 import { setQueueIdx } from '../../features/media/queueSlice';
+import { setIsPlaying } from '../../features/media/playerSlice';
 
 import { ReactComponent as BackwardIcon } from '../../assets/icons/backward.svg';
 import { ReactComponent as ForwardIcon } from '../../assets/icons/forward.svg';
 import { ReactComponent as PauseIcon } from '../../assets/icons/pause.svg';
 import { ReactComponent as PlayIcon } from '../../assets/icons/play.svg';
 
-
 interface Props {
     isPlaying: boolean;
-    queue: Song[],
-    queueIdx: number,
-    audioRef: RefObject<HTMLAudioElement>;
+    queue: Song[];
+    queueIdx: number;
 }
 
 export default function Controls(props: Props) {
-    const { isPlaying, queue, queueIdx, audioRef } = props;
+    const { isPlaying, queue, queueIdx } = props;
     const dispatch = useDispatch();
 
     function onPrevious() {
+        if (queueIdx < 0) return;
+
         if (queueIdx === 0) {
             // First song, wrap to end
             dispatch(setQueueIdx(queue.length - 1));
@@ -30,6 +31,8 @@ export default function Controls(props: Props) {
     }
 
     function onNext() {
+        if (queueIdx < 0) return;
+
         if (queueIdx === queue.length - 1) {
             // Last song, wrap to start
             dispatch(setQueueIdx(0));
@@ -39,13 +42,7 @@ export default function Controls(props: Props) {
     }
 
     function toggleIsPlaying() {
-        if (!audioRef.current) return;
-
-        if (isPlaying) {
-            audioRef.current.pause();
-        } else {
-            audioRef.current.play();
-        }
+        dispatch(setIsPlaying(!isPlaying));
     }
 
     return (

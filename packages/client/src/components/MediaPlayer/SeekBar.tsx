@@ -24,8 +24,8 @@ export default function SeekBar(props: Props) {
     }
 
     return (
-        <div className={'w-4/12 max-w-[500px]'}>
-            <p>{formatSongTime(currentTime)}</p>
+        <div className={'w-full max-w-[500px] flex gap-2'}>
+            <p className={'text-sm text-gray-500'}>{formatSongTime(currentTime)}</p>
             <input
                 type={'range'}
                 min={0}
@@ -34,7 +34,7 @@ export default function SeekBar(props: Props) {
                 onChange={onSeek}
                 className={'w-full accent-rose-500'}
             />
-            <p>{formatSongTime(duration)}</p>
+            <p className={'text-sm text-gray-500'}>{formatSongTime(duration)}</p>
         </div>
     );
 }
