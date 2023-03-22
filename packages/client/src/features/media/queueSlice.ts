@@ -48,6 +48,9 @@ export const queueSlice = createSlice({
                 }
             }
         },
+        clearQueue: (state) => {
+            state.queue = [];
+        },
         setQueueIdx: (state, action) => {
             state.queueIdx = action.payload;
         },
@@ -57,6 +60,13 @@ export const queueSlice = createSlice({
     },
 });
 
-export const { setCurrentSong, addSongToQueue, removeSongFromQueue, setQueueIdx, setIsLooped } = queueSlice.actions;
+export const {
+    setCurrentSong,
+    addSongToQueue,
+    removeSongFromQueue,
+    clearQueue,
+    setQueueIdx,
+    setIsLooped,
+} = queueSlice.actions;
 
 export default queueSlice.reducer;

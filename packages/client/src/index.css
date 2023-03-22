@@ -4,6 +4,6 @@
 
 @layer components {
     .bottom-pill {
-        @apply after:h-[4px] after:bg-red-500 after:block after:rounded-xl
+        @apply after:h-[4px] after:bg-rose-500 after:block after:rounded-xl
     }
 }
