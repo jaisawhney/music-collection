@@ -18,6 +18,8 @@ export async function getSong(req: Request, res: Response) {
             albumId: true,
             duration: true,
             genre: true,
+            artist: true,
+            album: true,
         },
     });
     res.status(200).json(song);
@@ -34,7 +36,7 @@ export async function getSongs(req: Request, res: Response) {
             albumId: true,
             duration: true,
             genre: true,
-            artist: true, // Include nested resources to make life easier
+            artist: true,
             album: true,
         },
         orderBy: {

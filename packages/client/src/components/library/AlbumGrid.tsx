@@ -1,26 +1,24 @@
 import AlbumCard from './AlbumCard';
-import { useQuery } from '@tanstack/react-query';
 import { Album } from '../../common/types';
+import { clsx } from 'clsx';
 
-export default function AlbumGrid() {
-    const { data: albums, status } = useQuery(['albums'], fetchAlbums);
+interface Props {
+    albums: Album[];
+}
 
-    async function fetchAlbums() {
-        const res = await fetch('/api/albums');
-        return res.json();
-    }
-
-    if (status === 'loading')
-        return <p>Loading</p>;
-
-    if (status === 'error')
-        return <p>Error</p>;
+export default function AlbumGrid(props: Props) {
+    const { albums } = props;
 
     return (
-        <>
+        <div
+            className={clsx(
+                'w-full mt-2 gap-5 content-center grid grid-cols-2',
+                'sm:grid-cols-[repeat(auto-fill,minmax(150px,1fr))]',
+            )}
+        >
             {albums.map((album: Album) => (
                 <AlbumCard key={album.id} data={album} />
             ))}
-        </>
+        </div>
     );
 }

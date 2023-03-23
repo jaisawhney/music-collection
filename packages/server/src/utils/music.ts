@@ -12,10 +12,14 @@ import glob from 'glob';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const prisma = new PrismaClient();
-const basePath = process.env.MEDIA_PATH as string;
-
 
 export async function syncMedia() {
+    let basePath: string = process.env.MEDIA_PATH as string;
+    if (!basePath) throw Error('Missing media path!');
+
+    const mediaFolderDetails = fs.existsSync(basePath) && fs.lstatSync(basePath).isDirectory();
+    if (!mediaFolderDetails) throw Error('Invalid media folder!');
+
     const files = getMediaFiles(basePath);
     for (const file of files) {
         // Load the file into a buffer and create a unique identifier for the file
@@ -25,7 +29,7 @@ export async function syncMedia() {
         // Extract the music metadata by parsing the file buffer
         const metadata: IAudioMetadata = await parseBuffer(fileBuffer, undefined, { duration: true });
 
-        if (!metadata.common.title || !metadata.common.album) continue;
+        if (!metadata.common.title || !metadata.common.album || !metadata.common.artist) continue;
 
         // Add the media metadata to the database
         const artist = await findOrCreateArtist(metadata);
@@ -34,7 +38,11 @@ export async function syncMedia() {
         // Extract the album cover if not already present
         if (!album.thumbnail) await createAlbumThumbnail(album, metadata);
 
-        await findOrCreateSong(artist, album, file, hash, metadata);
+        const song = await findOrCreateSong(artist, album, file, hash, metadata);
+
+        // Connect the genre if it exists in the metadata
+        const genres = metadata.common.genre;
+        if (!!genres?.length) await connectGenre(song, genres);
     }
 }
 
@@ -116,7 +124,6 @@ async function findOrCreateSong(
     hash: string,
     metadata: IAudioMetadata,
 ) {
-
     return await prisma.song.upsert({
         where: {
             mediaHash: hash,
@@ -138,13 +145,26 @@ async function findOrCreateSong(
                     id: album.id,
                 },
             },
-            genres: {
-                connectOrCreate: (metadata.common.genre || []).map((genre) => (
-                    {
-                        where: { name: genre },
-                        create: { name: genre },
-                    }
-                )),
+        },
+    });
+}
+
+async function connectGenre(song: { id: number }, genres: string[]) {
+    const genre = genres[0];
+    return prisma.song.update({
+        where: {
+            id: song.id,
+        },
+        data: {
+            genre: {
+                connectOrCreate: {
+                    where: {
+                        name: genre,
+                    },
+                    create: {
+                        name: genre,
+                    },
+                },
             },
         },
     });

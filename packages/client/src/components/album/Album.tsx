@@ -10,13 +10,7 @@ export default function Album() {
     const { id } = useParams();
 
     const { data: album } = useQuery(['album', id], fetchAlbum);
-    const artistId = album?.artistId;
-
-    const { data: songs } = useQuery(['songs', id], fetchSongs);
-
-    const { data: artist, status } = useQuery(
-        ['artist', artistId], fetchArtist, { enabled: (!!artistId && Array.isArray(songs)) },
-    );
+    const { data: songs, status } = useQuery(['albumSongs', id], fetchSongs, { enabled: !!album });
 
     async function fetchAlbum() {
         const res = await fetch(`/api/albums/${id}`);
@@ -25,11 +19,6 @@ export default function Album() {
 
     async function fetchSongs() {
         const res = await fetch(`/api/albums/${id}/songs`);
-        return res.json();
-    }
-
-    async function fetchArtist() {
-        const res = await fetch(`/api/artists/${album.artistId}`);
         return res.json();
     }
 
@@ -51,10 +40,10 @@ export default function Album() {
                     'sm:ml-4 sm:text-left',
                 )}>
                     <h1 className={'font-semibold text-xl'}>{album.name}</h1>
-                    <p className={'text-gray-500'}>{artist.name}</p>
+                    <p className={'text-gray-500'}>{album.artist.name}</p>
                 </div>
             </div>
-            <AlbumSongs songs={songs} album={album} artist={artist} />
+            <AlbumSongs songs={songs} album={album} artist={album.artist} />
         </div>
     );
 }

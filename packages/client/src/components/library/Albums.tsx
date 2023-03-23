@@ -1,19 +1,21 @@
-import { clsx } from 'clsx';
+import { useQuery } from '@tanstack/react-query';
 import AlbumGrid from './AlbumGrid';
 
-
 export default function Albums() {
+    const { data: albums, status } = useQuery(['albums'], fetchAlbums);
+
+    async function fetchAlbums() {
+        const res = await fetch('/api/albums');
+        return res.json();
+    }
+
+    if (status === 'loading')
+        return <p>Loading</p>;
+
+    if (status === 'error')
+        return <p>Error</p>;
 
     return (
-        <div className={'w-full'}>
-            <div
-                className={clsx(
-                    'mt-2 gap-5 content-center grid grid-cols-2',
-                    'sm:grid-cols-[repeat(auto-fill,minmax(150px,1fr))]',
-                )}
-            >
-                <AlbumGrid />
-            </div>
-        </div>
+       <AlbumGrid albums={albums}/>
     );
 }

@@ -1,14 +1,15 @@
+export interface Artist {
+    id: number;
+    name: string;
+}
+
 export interface Album {
     id: number;
     name: string;
     year: number;
     thumbnail: string;
     artistId: number;
-}
-
-export interface Artist {
-    id: number;
-    name: string;
+    artist: Artist;
 }
 
 export interface Song {
