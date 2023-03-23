@@ -3,7 +3,7 @@ export interface Album {
     name: string;
     year: number;
     thumbnail: string;
-    artistId: number
+    artistId: number;
 }
 
 export interface Artist {
@@ -17,6 +17,9 @@ export interface Song {
     mediaHash: string;
     duration: number;
     track?: number;
+    albumId?: number;
     album?: Album;
-    artist?: Artist
+    artistId?: number;
+    artist?: Artist;
+    genre?: { id: number, name: string };
 }

@@ -9,7 +9,7 @@ export default function Container() {
             <Header />
 
             {/* Main Content */}
-            <div className={'flex-1 flex flex-col items-center py-5 bg-neutral-50 px-3'}>
+            <div className={'flex-1 flex flex-col items-center my-4 px-3'}>
                 <Outlet />
             </div>
 

@@ -13,7 +13,7 @@ export default function Library() {
         <div className={'max-w-[1000px] w-full'}>
             <div className={'mb-5'}>
                 <h1 className={'text-left text-2xl font-semibold'}>Your Library</h1>
-                <div className={'mt-2 flex flex-wrap gap-4'}>
+                <div className={'mt-2 flex flex-wrap gap-2'}>
                     <NavLink to={`albums`} className={navLinkClassnames}>
                         <p>Albums</p>
                     </NavLink>

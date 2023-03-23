@@ -5,15 +5,15 @@ export default function Header() {
 
     const navLinkClassnames = ({ isActive }: { isActive: boolean }) => {
         return clsx(
-            'p-1 font-bold uppercase',
+            'p-1 font-bold uppercase text-center',
             isActive && 'bottom-pill',
         );
     };
 
     return (
         <div className={clsx(
-            'p-4 flex justify-center gap-5',
-            'sm:gap-24',
+            'p-3 flex justify-center gap-5 border-b',
+            'sm:gap-20',
         )}>
             <NavLink to={`/`} className={navLinkClassnames}>
                 <p>Home</p>
