@@ -11,6 +11,8 @@ import Playlists from './components/library/Playlists';
 import Songs from './components/library/Songs';
 import NotFound from './components/common/NotFound';
 import Container from './components/common/Container';
+import Artist from './components/artist/Artist';
+import Queue from './components/queue/Queue';
 
 const queryClient = new QueryClient();
 
@@ -22,7 +24,9 @@ function App() {
                     <Route path={'/'} element={<Container/>}>
                         <Route index element={<Home />} />
                         <Route path={'/albums/:id'} element={<Album />} />
+                        <Route path={'/artists/:id'} element={<Artist />} />
                         <Route path={'/settings'} element={<Settings />} />
+                        <Route path={'/queue'} element={<Queue />} />
                         <Route path={'/library/*'} element={<Library />}>
                             <Route index element={<Navigate replace={true} to={'albums'}/>} />
                             <Route path={'albums'} element={<Albums />} />

@@ -5,7 +5,7 @@ export default function Library() {
     const navLinkClassnames = ({ isActive }: { isActive: boolean }) => {
         return clsx(
             'px-2 py-1 bg-gray-200 rounded-md',
-            isActive && 'bg-rose-400 text-white',
+            isActive && 'bg-rose-500 text-white',
         );
     };
 

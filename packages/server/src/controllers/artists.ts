@@ -18,3 +18,14 @@ export async function getArtists(req: Request, res: Response) {
     const albums = await prisma.artist.findMany();
     res.status(200).json(albums);
 }
+
+export async function getArtistAlbums(req: Request, res: Response) {
+    const id: string = req.params.albumId;
+
+    const songs = await prisma.album.findMany({
+        where: {
+            artistId: parseInt(id),
+        },
+    });
+    res.status(200).json(songs);
+}
