@@ -1,8 +1,9 @@
 import {Router} from "express";
-import { updateSettings } from '../controllers/settings.js';
+import { getSettings, updateSettings } from '../controllers/settings.js';
 
 const router = Router();
 
+router.get('/', getSettings);
 router.post('/', updateSettings);
 
 export default router;
