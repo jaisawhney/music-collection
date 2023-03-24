@@ -18,9 +18,7 @@ export interface Song {
     mediaHash: string;
     duration: number;
     track?: number;
-    albumId?: number;
     album?: Album;
-    artistId?: number;
     artist?: Artist;
     genre?: { id: number, name: string };
 }

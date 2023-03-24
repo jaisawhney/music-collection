@@ -20,9 +20,11 @@ export default function Library() {
                     <NavLink to={`artists`} className={navLinkClassnames}>
                         <p>Artists</p>
                     </NavLink>
+                    {/*
                     <NavLink to={`playlists`} className={navLinkClassnames}>
                         <p>Playlists</p>
                     </NavLink>
+                    */}
                     <NavLink to={`songs`} className={navLinkClassnames}>
                         <p>Songs</p>
                     </NavLink>

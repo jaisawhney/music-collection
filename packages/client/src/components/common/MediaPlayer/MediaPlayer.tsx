@@ -10,7 +10,7 @@ import { setQueueIdx } from '../../../features/media/queueSlice';
 import CurrentTrack from './CurrentTrack';
 import Controls from './Controls';
 import SeekBar from './SeekBar';
-import VolumeSlider from './VolumeSlider';
+import SecondaryControls from './SecondaryControls';
 
 export default function MediaPlayer() {
     const dispatch = useDispatch();
@@ -31,17 +31,14 @@ export default function MediaPlayer() {
     useEffect(() => {
         if (!audioRef.current) return;
 
-        if (queueIdx >= 0) {
-            // Get the current song in the queue
-            const song = queue[queueIdx];
-
+        if (queueIdx >= 0 && currentSong) {
             // Start the stream
-            audioRef.current.src = `/api/stream/${song.mediaHash}`;
+            audioRef.current.src = `/api/stream/${currentSong.mediaHash}`;
             audioRef.current.load();
             audioRef.current.play();
-            dispatch(setDuration(song.duration));
+            dispatch(setDuration(currentSong.duration));
         }
-    }, [queueIdx]);
+    }, [queueIdx, currentSong]);
 
     // On pause/resume
     useEffect(() => {
@@ -107,7 +104,7 @@ export default function MediaPlayer() {
                 />
             </div>
 
-            <VolumeSlider volume={volume} />
+            <SecondaryControls volume={volume} />
         </div>
     );
 }

@@ -4,7 +4,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export async function getAlbum(req: Request, res: Response) {
-    const id: string | undefined = req.params.albumId;
+    const id: string = req.params.albumId;
 
     const album = await prisma.album.findUnique({
         where: {
@@ -32,6 +32,7 @@ export async function getAlbumSongs(req: Request, res: Response) {
         orderBy: {
             track: 'asc',
         },
+        include: { genre: true, album: true, artist: true },
     });
     res.status(200).json(songs);
 }

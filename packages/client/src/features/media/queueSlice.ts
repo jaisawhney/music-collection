@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Song } from '../../common/types';
 
 interface QueueState {
@@ -19,22 +19,19 @@ export const queueSlice = createSlice({
     name: 'mediaQueue',
     initialState,
     reducers: {
-        setCurrentSong: (state, action) => {
+        setCurrentSong: (state, action: PayloadAction<Song>) => {
             state.queueIdx = state.queue.findIndex(track => track.id == action.payload.id); // -1 or track index
         },
-        addSongToQueue: (state, action) => {
+        addSongToQueue: (state, action: PayloadAction<Song>) => {
             // Prevent duplicates
             const songIdx = state.queue.findIndex(track => track.id == action.payload.id);
 
             if (songIdx === -1) {
                 // Add if not a duplicate
                 state.queue.push(action.payload);
-            } else {
-                // Play if a duplicate
-                state.queueIdx = songIdx;
             }
         },
-        removeSongFromQueue: (state, action) => {
+        removeSongFromQueue: (state, action: PayloadAction<Song>) => {
             const songIdx = state.queue.findIndex(track => track.id == action.payload.id);
             if (songIdx !== -1) {
                 state.queue.splice(songIdx, 1);
@@ -52,11 +49,15 @@ export const queueSlice = createSlice({
             state.queue = [];
             state.queueIdx = -1;
         },
-        setQueueIdx: (state, action) => {
+        setQueueIdx: (state, action: PayloadAction<number>) => {
             state.queueIdx = action.payload;
         },
-        setIsLooped: (state, action) => {
+        setIsLooped: (state, action: PayloadAction<boolean>) => {
             state.isLooped = action.payload;
+        },
+        setQueueItems: (state, action: PayloadAction<Song[]>) => {
+            state.queue = action.payload;
+            state.queueIdx = -1;
         },
     },
 });
@@ -68,6 +69,7 @@ export const {
     clearQueue,
     setQueueIdx,
     setIsLooped,
+    setQueueItems,
 } = queueSlice.actions;
 
 export default queueSlice.reducer;

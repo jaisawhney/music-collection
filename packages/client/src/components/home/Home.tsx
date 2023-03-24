@@ -1,9 +1,8 @@
-import { clsx } from 'clsx';
-import AlbumGrid from '../library/AlbumGrid';
 import Thumbnail from '../common/Thumbnail';
 import { Song } from '../../common/types';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
+import Albums from '../library/Albums';
 
 function Home() {
     const queue: Song[] = useSelector((state: RootState) => state.queue.queue);
@@ -26,17 +25,10 @@ function Home() {
                     </div>
                 </div>
             )}
-            {/* Album Grid */}
+            {/* Album Grid (TEMPORARY) */}
             <div className={'max-w-[1000px] w-full'}>
                 <h1 className={'text-left text-2xl font-semibold'}>Albums</h1>
-                <div
-                    className={clsx(
-                        'mt-2 gap-5 content-center grid grid-cols-2',
-                        'sm:grid-cols-[repeat(auto-fill,minmax(150px,1fr))]',
-                    )}
-                >
-                    <AlbumGrid />
-                </div>
+                <Albums />
             </div>
         </>
     );
