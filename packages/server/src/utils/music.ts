@@ -17,6 +17,7 @@ export async function syncMedia() {
     let basePath: string = process.env.MEDIA_PATH as string;
     if (!basePath) throw Error('Missing media path!');
 
+    console.log(basePath)
     const mediaFolderDetails = fs.existsSync(basePath) && fs.lstatSync(basePath).isDirectory();
     if (!mediaFolderDetails) throw Error('Invalid media folder!');
 
@@ -100,7 +101,7 @@ async function createAlbumThumbnail(
     // Store the thumbnail on the server
     const fileExtension = mime.extension(thumbnail.format);
     const uploadsPath = path.join(__dirname, '../public', 'uploads', 'covers');
-    const filePath = path.join(uploadsPath, `${album.id}.${fileExtension}`);
+    const filePath = path.join(uploadsPath, `cover_${album.id}.${fileExtension}`);
 
     fs.writeFileSync(filePath, thumbnail.data, 'binary');
 
@@ -112,7 +113,7 @@ async function createAlbumThumbnail(
             },
         },
         data: {
-            thumbnail: `/uploads/covers/${album.id}.${fileExtension}`,
+            thumbnail: `/uploads/covers/cover_${album.id}.${fileExtension}`,
         },
     });
 }

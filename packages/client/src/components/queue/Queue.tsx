@@ -2,8 +2,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
 import { Song } from '../../common/types';
 import { ReactComponent as VolumeIcon } from '../../assets/icons/volume.svg';
-import { addSongToQueue, clearQueue, setCurrentSong } from '../../features/media/queueSlice';
-import { ReactComponent as OptionsIcon } from '../../assets/icons/vertical-ellipsis.svg';
+import { addSongToQueue, clearQueue, removeSongFromQueue, setCurrentSong } from '../../features/media/queueSlice';
+import { ReactComponent as RemoveIcon } from '../../assets/icons/remove.svg';
 import { formatSongTime } from '../../utils/formatSongTime';
 import { clsx } from 'clsx';
 
@@ -67,13 +67,14 @@ export default function Queue() {
                             </p>
                         </div>
                         <div className={'flex items-center'}>
-                            <OptionsIcon
+                            <RemoveIcon
                                 className={clsx(
-                                    'm-auto visible h-[20px] fill-rose-500',
+                                    'my-auto visible h-[20px] stroke-rose-500',
                                     'md:invisible md:group-hover:visible',
                                 )}
                                 onClick={(e) => {
                                     e.stopPropagation();
+                                    dispatch(removeSongFromQueue(song));
                                 }}
                             />
                         </div>

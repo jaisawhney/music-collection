@@ -2,7 +2,7 @@ import { Song } from '../../common/types';
 import { addSongToQueue, setCurrentSong } from '../../features/media/queueSlice';
 import { useDispatch } from 'react-redux';
 
-import { ReactComponent as OptionsIcon } from '../../assets/icons/vertical-ellipsis.svg';
+import { ReactComponent as AddIcon } from '../../assets/icons/add.svg';
 import { formatSongTime } from '../../utils/formatSongTime';
 import { clsx } from 'clsx';
 
@@ -47,13 +47,14 @@ export default function AlbumSongs(props: Props) {
                             </p>
                         </div>
                         <div className={'flex'}>
-                            <OptionsIcon
+                            <AddIcon
                                 className={clsx(
-                                    'm-auto visible h-[20px] fill-rose-500',
+                                    'my-auto visible h-[20px] fill-rose-500',
                                     'md:invisible md:group-hover:visible',
                                 )}
                                 onClick={(e) => {
                                     e.stopPropagation();
+                                    dispatch(addSongToQueue(song));
                                 }}
                             />
                         </div>

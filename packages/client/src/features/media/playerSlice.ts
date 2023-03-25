@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface PlayerState {
     volume: number;
@@ -20,19 +20,19 @@ export const playerSlice = createSlice({
     name: 'mediaPlayer',
     initialState,
     reducers: {
-        setIsPlaying: (state, action) => {
+        setIsPlaying: (state, action: PayloadAction<boolean>) => {
             state.isPlaying = action.payload;
         },
-        setDuration: (state, action) => {
+        setDuration: (state, action: PayloadAction<number>) => {
             state.duration = action.payload;
         },
-        setCurrentTime: (state, action) => {
+        setCurrentTime: (state, action: PayloadAction<number>) => {
             state.currentTime = action.payload;
         },
-        setVolume: (state, action) => {
+        setVolume: (state, action: PayloadAction<number>) => {
             state.volume = action.payload;
         },
-        setMuted: (state, action) => {
+        setMuted: (state, action: PayloadAction<number>) => {
             state.volume = action.payload;
         },
     },
