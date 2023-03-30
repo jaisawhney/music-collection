@@ -7,10 +7,14 @@
   "scripts": {
     "dev": "npx lerna run --stream dev",
     "build": "npx lerna run build",
-    "bootstrap": "npx lerna bootstrap"
+    "bootstrap": "npx lerna bootstrap",
+    "postinstall": "npm run bootstrap"
   },
   "devDependencies": {
     "@swc/core": "^1.3.42",
     "lerna": "^6.5.1"
+  },
+  "optionalDependencies": {
+    "@nrwl/nx-linux-x64-gnu": "15.8.9"
   }
 }
