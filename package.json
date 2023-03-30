@@ -5,9 +5,17 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "npx lerna run --stream dev"
+    "dev": "npx lerna run --stream dev",
+    "build": "npx lerna run build",
+    "bootstrap": "npx lerna bootstrap",
+    "postinstall": "npm run bootstrap"
   },
   "devDependencies": {
     "lerna": "^6.5.1"
+  },
+  "overrides": {
+    "@lerna/version": {
+      "@nrwl/devkit": "15.5.2"
+    }
   }
 }
