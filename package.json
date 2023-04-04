@@ -15,6 +15,7 @@
     "lerna": "^6.5.1"
   },
   "optionalDependencies": {
-    "@nrwl/nx-linux-x64-gnu": "15.8.9"
+    "@nrwl/nx-linux-x64-gnu": "15.8.9",
+    "@nrwl/nx-linux-arm64-gnu": "15.9.2"
   }
 }

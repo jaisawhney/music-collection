@@ -101,8 +101,8 @@ export default function MediaPlayer() {
             <SecondaryControls volume={volume} />
 
             <div className={clsx(
-                'hidden',
-                'md:flex grow basis-0 flex-col justify-center items-center max-w-[500px]',
+                'hidden flex-col justify-center items-center max-w-[500px]',
+                'md:flex md:grow md:basis-0 ',
             )}>
                 <Controls
                     isPlaying={isPlaying}
@@ -120,7 +120,8 @@ export default function MediaPlayer() {
 
 
             <div className={clsx(
-                'h-full flex justify-between grow basis-0 min-w-0 w-full',
+                'h-full flex justify-between min-w-0 w-full',
+                'md:grow md:basis-0',
             )}>
                 {/* TODO: Add functionality */}
 

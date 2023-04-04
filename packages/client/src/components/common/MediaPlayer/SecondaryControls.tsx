@@ -23,7 +23,7 @@ export default function SecondaryControls(props: Props) {
     return (
         <div className={clsx(
             'hidden',
-            'md:flex justify-end grow basis-0',
+            'md:flex md:justify-end md:grow md:basis-0',
         )}>
             <Link to={'/queue'} className={'h-[18px]'}>
                 <QueueIcon className={'h-full'} />
