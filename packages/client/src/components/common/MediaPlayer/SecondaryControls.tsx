@@ -5,6 +5,7 @@ import { ReactComponent as QueueIcon } from '../../../assets/icons/note-list.svg
 import { ReactComponent as VolumeIcon } from '../../../assets/icons/volume.svg';
 import { ReactComponent as MuteIcon } from '../../../assets/icons/mute.svg';
 import { Link } from 'react-router-dom';
+import { clsx } from 'clsx';
 
 interface Props {
     volume: number;
@@ -20,7 +21,10 @@ export default function SecondaryControls(props: Props) {
     }
 
     return (
-        <div className={'flex'}>
+        <div className={clsx(
+            'hidden',
+            'md:flex justify-end grow basis-0',
+        )}>
             <Link to={'/queue'} className={'h-[18px]'}>
                 <QueueIcon className={'h-full'} />
             </Link>

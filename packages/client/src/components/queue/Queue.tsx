@@ -38,7 +38,7 @@ export default function Queue() {
                         key={song.id}
                         className={
                             'select-none group cursor-pointer border-b rounded-md hover:bg-gray-200 last:border-none ' +
-                            'grid grid-cols-[50px_max-content_1fr_20px] gap-1 py-1'
+                            'grid grid-cols-[50px_1fr_min-content_20px] gap-1 py-1 '
                         }
                         onClick={() => {
                             dispatch(addSongToQueue(song));
@@ -53,15 +53,15 @@ export default function Queue() {
                                 </p>
                             }
                         </div>
-                        <div className={'flex flex-col'}>
-                            <p className={'font-medium'}>
+                        <div className={'flex flex-col overflow-hidden whitespace-nowrap'}>
+                            <p className={'font-medium text-ellipsis overflow-hidden'}>
                                 {song.title}
                             </p>
-                            <p className={'text-gray-500'}>
+                            <p className={'text-gray-500 text-ellipsis overflow-hidden'}>
                                 {song.album?.name}
                             </p>
                         </div>
-                        <div className={'flex justify-end items-center'}>
+                        <div className={'flex items-center'}>
                             <p className={'text-gray-500'}>
                                 {formattedTime}
                             </p>

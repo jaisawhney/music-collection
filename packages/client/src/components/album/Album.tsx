@@ -36,7 +36,7 @@ export default function Album() {
     return (
         <div className={'max-w-[750px] w-full'}>
             <div className={clsx(
-                'flex flex-wrap content-center flex-col',
+                'flex flex-wrap items-center flex-col',
                 'sm:justify-start sm:flex-row',
             )}>
                 <Thumbnail image={album.thumbnail} className={'w-[175px] h-[175px]'} />

@@ -12,6 +12,13 @@ import Controls from './Controls';
 import SeekBar from './SeekBar';
 import SecondaryControls from './SecondaryControls';
 
+
+import { ReactComponent as ForwardIcon } from '../../../assets/icons/forward.svg';
+import { ReactComponent as PauseIcon } from '../../../assets/icons/pause.svg';
+import { ReactComponent as PlayIcon } from '../../../assets/icons/play.svg';
+
+
+// TODO: Refactor file
 export default function MediaPlayer() {
     const dispatch = useDispatch();
 
@@ -73,11 +80,14 @@ export default function MediaPlayer() {
         dispatch(setIsPlaying(false));
     }
 
-    // TODO: Fix mobile layout
+    function toggleIsPlaying() {
+        dispatch(setIsPlaying(!isPlaying));
+    }
+
     return (
         <div className={clsx(
-            'py-2 px-5 w-full h-[75px] sticky bottom-0 flex justify-between items-center bg-white border',
-            'sm:px-10',
+            'py-2 px-5 w-full h-[75px] sticky bottom-0 flex flex-col justify-between items-center bg-white border',
+            'sm:px-10 md:flex-row-reverse',
         )}>
             <audio
                 id={'audio'}
@@ -88,13 +98,17 @@ export default function MediaPlayer() {
                 onTimeUpdate={onTimeUpdate}
             />
 
-            <CurrentTrack currentSong={currentSong} />
+            <SecondaryControls volume={volume} />
 
-            <div className={'flex flex-col items-center w-full max-w-[500px]'}>
+            <div className={clsx(
+                'hidden',
+                'md:flex grow basis-0 flex-col justify-center items-center max-w-[500px]',
+            )}>
                 <Controls
                     isPlaying={isPlaying}
                     queue={queue}
                     queueIdx={queueIdx}
+                    toggleIsPlaying={toggleIsPlaying}
                 />
 
                 <SeekBar
@@ -104,7 +118,25 @@ export default function MediaPlayer() {
                 />
             </div>
 
-            <SecondaryControls volume={volume} />
+
+            <div className={clsx(
+                'h-full flex justify-between grow basis-0 min-w-0 w-full',
+            )}>
+                {/* TODO: Add functionality */}
+
+                <CurrentTrack currentSong={currentSong} />
+
+                <div className={clsx(
+                    'flex items-center gap-2',
+                    'md:hidden',
+                )}>
+                    <button onClick={toggleIsPlaying}>
+                        {isPlaying ? <PauseIcon className={'h-[25px]'} /> : <PlayIcon className={'h-[25px]'} />}
+                    </button>
+
+                    <ForwardIcon className={'h-[25px]'} />
+                </div>
+            </div>
         </div>
     );
 }

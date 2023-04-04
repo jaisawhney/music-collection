@@ -15,7 +15,7 @@ export default function AlbumSongs(props: Props) {
     const dispatch = useDispatch();
 
     return (
-        <div className={'my-5'}>
+        <div className={'mt-5'}>
             {!!songs && songs.map((song: Song) => {
                 const formattedTime = formatSongTime(song.duration);
 
@@ -24,7 +24,7 @@ export default function AlbumSongs(props: Props) {
                         key={song.id}
                         className={
                             'select-none group border-b cursor-pointer hover:bg-gray-200 last:border-none ' +
-                            'grid grid-cols-[minmax(20px,min-content)_max-content_1fr_20px] gap-1 px-1 py-2'
+                            'grid grid-cols-[minmax(20px,min-content)_1fr_min-content_20px] gap-1 px-1 py-2'
                         }
                         onClick={() => {
                             dispatch(addSongToQueue(song));
@@ -33,23 +33,23 @@ export default function AlbumSongs(props: Props) {
                     >
                         <div>
                             <p className={'text-gray-500'}>
-                                {song.track}.
+                                {song.track && `${song.track}.`}
                             </p>
                         </div>
-                        <div>
-                            <p>
+                        <div className={'overflow-hidden'}>
+                            <p className={'text-ellipsis whitespace-nowrap overflow-hidden'}>
                                 {song.title}
                             </p>
                         </div>
-                        <div className={'flex justify-end'}>
+                        <div>
                             <p className={'text-gray-500'}>
                                 {formattedTime}
                             </p>
                         </div>
-                        <div className={'flex'}>
+                        <div className={'flex items-center'}>
                             <AddIcon
                                 className={clsx(
-                                    'my-auto visible h-[20px] fill-rose-500',
+                                    'visible h-[20px] fill-rose-500',
                                     'md:invisible md:group-hover:visible',
                                 )}
                                 onClick={(e) => {

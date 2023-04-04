@@ -9,11 +9,11 @@ export default function CurrentTrack(props: Props) {
     const { currentSong } = props;
 
     return (
-        <div className={'flex gap-4 h-full'}>
+        <div className={'flex items-center gap-4 h-full overflow-hidden'}>
             <Thumbnail image={currentSong?.album?.thumbnail} className={'h-full'} />
-            <div>
-                <p className={'font-semibold text-sm'}>{currentSong?.title || '...'}</p>
-                <p className={'text-gray-500 text-sm'}>{currentSong?.artist?.name || '...'}</p>
+            <div className={'overflow-hidden whitespace-nowrap'}>
+                <p className={'font-semibold text-sm text-ellipsis overflow-hidden'}>{currentSong?.title || '...'}</p>
+                <p className={'text-gray-500 text-sm text-ellipsis overflow-hidden '}>{currentSong?.artist?.name || '...'}</p>
             </div>
         </div>
     );

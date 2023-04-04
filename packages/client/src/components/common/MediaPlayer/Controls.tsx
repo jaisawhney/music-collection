@@ -2,7 +2,6 @@ import { Song } from '../../../common/types';
 import { useDispatch } from 'react-redux';
 
 import { setQueueIdx } from '../../../features/media/queueSlice';
-import { setIsPlaying } from '../../../features/media/playerSlice';
 
 import { ReactComponent as BackwardIcon } from '../../../assets/icons/backward.svg';
 import { ReactComponent as ForwardIcon } from '../../../assets/icons/forward.svg';
@@ -13,10 +12,11 @@ interface Props {
     isPlaying: boolean;
     queue: Song[];
     queueIdx: number;
+    toggleIsPlaying: () => void;
 }
 
 export default function Controls(props: Props) {
-    const { isPlaying, queue, queueIdx } = props;
+    const { isPlaying, queue, queueIdx, toggleIsPlaying } = props;
     const dispatch = useDispatch();
 
     function onPrevious() {
@@ -41,12 +41,8 @@ export default function Controls(props: Props) {
         }
     }
 
-    function toggleIsPlaying() {
-        dispatch(setIsPlaying(!isPlaying));
-    }
-
     return (
-        <div className={'flex items-center'}>
+        <div className={'flex items-center justify-center'}>
             <button onClick={onPrevious}>
                 <BackwardIcon className={'h-[20px]'} />
             </button>
