@@ -7,7 +7,6 @@ export interface Album {
     id: number;
     name: string;
     year: number;
-    thumbnail: string;
     artistId: number;
     artist: Artist;
 }

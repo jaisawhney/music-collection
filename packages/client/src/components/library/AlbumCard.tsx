@@ -8,7 +8,7 @@ export default function AlbumCard(props: { data: Album }) {
     return (
         <div className={'cursor-pointer'}>
             <Link to={`/albums/${album.id}`}>
-                <Thumbnail image={album.thumbnail} className={'mb-1'} />
+                <Thumbnail image={`/api/albums/${album.id}/cover`} className={'mb-1'} />
                 <p className={'font-semibold'}>{album.name}</p>
                 <p className={'text-gray-500'}>{album.artist.name}</p>
             </Link>

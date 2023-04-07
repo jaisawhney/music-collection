@@ -10,7 +10,7 @@ export default function CurrentTrack(props: Props) {
 
     return (
         <div className={'flex items-center gap-4 h-full overflow-hidden'}>
-            <Thumbnail image={currentSong?.album?.thumbnail} className={'h-full'} />
+            <Thumbnail image={currentSong?.album && `/api/albums/${currentSong.album.id}/cover`} className={'h-full'} />
             <div className={'overflow-hidden whitespace-nowrap'}>
                 <p className={'font-semibold text-sm text-ellipsis overflow-hidden'}>{currentSong?.title || '...'}</p>
                 <p className={'text-gray-500 text-sm text-ellipsis overflow-hidden '}>{currentSong?.artist?.name || '...'}</p>

@@ -39,7 +39,7 @@ export default function Album() {
                 'flex flex-wrap items-center flex-col',
                 'sm:justify-start sm:flex-row',
             )}>
-                <Thumbnail image={album.thumbnail} className={'w-[175px] h-[175px]'} />
+                <Thumbnail image={`/api/albums/${album.id}/cover`} className={'w-[175px] h-[175px]'} />
                 <div className={clsx(
                     'flex flex-col text-center justify-center',
                     'sm:ml-4 sm:text-left',

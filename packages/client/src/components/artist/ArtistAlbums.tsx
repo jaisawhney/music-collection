@@ -20,7 +20,7 @@ export default function ArtistAlbums(props: Props) {
                     'sm:gap-2 sm:flex-col',
                 )}>
                     <Link to={`/albums/${album.id}`}>
-                        <Thumbnail image={album.thumbnail} className={clsx(
+                        <Thumbnail image={`/api/albums/${album.id}/cover`} className={clsx(
                             'w-[100px]',
                             'sm:w-full',
                         )} />

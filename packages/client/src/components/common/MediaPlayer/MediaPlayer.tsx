@@ -13,12 +13,14 @@ import SeekBar from './SeekBar';
 import SecondaryControls from './SecondaryControls';
 
 
-import { ReactComponent as ForwardIcon } from '../../../assets/icons/forward.svg';
 import { ReactComponent as PauseIcon } from '../../../assets/icons/pause.svg';
 import { ReactComponent as PlayIcon } from '../../../assets/icons/play.svg';
+import { Link } from 'react-router-dom';
+import { ReactComponent as QueueIcon } from '../../../assets/icons/note-list.svg';
 
 
 // TODO: Refactor file
+// TODO: Split this up into smaller components?
 export default function MediaPlayer() {
     const dispatch = useDispatch();
 
@@ -36,6 +38,7 @@ export default function MediaPlayer() {
 
     // On queue updates
     useEffect(() => {
+        //TODO: Clean up this function
         if (!audioRef.current) return;
 
         if (queueIdx >= 0 && currentSong) {
@@ -44,6 +47,41 @@ export default function MediaPlayer() {
             audioRef.current.load();
             audioRef.current.play();
             dispatch(setDuration(currentSong.duration));
+
+            if ('mediaSession' in navigator) {
+                navigator.mediaSession.metadata = new MediaMetadata({
+                    title: currentSong.title,
+                    artist: currentSong.artist?.name,
+                    album: currentSong.album?.name,
+                    artwork: [
+                        {
+                            src: `/api/albums/${currentSong?.album?.id}/cover?width=96&height=96`,
+                            sizes: '96x96',
+                            type: 'image/png',
+                        },
+                        {
+                            src: `/api/albums/${currentSong?.album?.id}/cover?width=128&height=128`,
+                            sizes: '128x128',
+                            type: 'image/png',
+                        },
+                        {
+                            src: `/api/albums/${currentSong?.album?.id}/cover?width=192&height=192`,
+                            sizes: '192x192',
+                            type: 'image/png',
+                        },
+                        {
+                            src: `/api/albums/${currentSong?.album?.id}/cover?width=256&height=256`,
+                            sizes: '256x256',
+                            type: 'image/png',
+                        },
+                        {
+                            src: `/api/albums/${currentSong?.album?.id}/cover?width=512&height=512`,
+                            sizes: '512x512',
+                            type: 'image/png',
+                        },
+                    ],
+                });
+            }
         }
     }, [queueIdx, currentSong]);
 
@@ -85,57 +123,66 @@ export default function MediaPlayer() {
     }
 
     return (
-        <div className={clsx(
-            'py-2 px-5 w-full h-[75px] sticky bottom-0 flex flex-col justify-between items-center bg-white border',
-            'sm:px-10 md:flex-row-reverse',
-        )}>
-            <audio
-                id={'audio'}
-                ref={audioRef}
-                onPlay={() => dispatch(setIsPlaying(true))}
-                onPause={() => dispatch(setIsPlaying(false))}
-                onEnded={handleSongEnd}
-                onTimeUpdate={onTimeUpdate}
-            />
-
-            <SecondaryControls volume={volume} />
-
+        <div className={
+            'w-full h-[75px] sticky bottom-0 bg-white border px-3'
+        }>
             <div className={clsx(
-                'hidden flex-col justify-center items-center max-w-[500px]',
-                'md:flex md:grow md:basis-0 ',
+                'mx-auto py-2 w-full max-w-[1000px] h-full flex flex-col justify-between items-center',
+                'md:flex-row-reverse',
             )}>
-                <Controls
-                    isPlaying={isPlaying}
-                    queue={queue}
-                    queueIdx={queueIdx}
-                    toggleIsPlaying={toggleIsPlaying}
+
+                <audio
+                    id={'audio'}
+                    ref={audioRef}
+                    onPlay={() => dispatch(setIsPlaying(true))}
+                    onPause={() => dispatch(setIsPlaying(false))}
+                    onEnded={handleSongEnd}
+                    onTimeUpdate={onTimeUpdate}
                 />
 
-                <SeekBar
-                    duration={duration}
-                    currentTime={currentTime}
-                    audioRef={audioRef}
-                />
-            </div>
-
-
-            <div className={clsx(
-                'h-full flex justify-between min-w-0 w-full',
-                'md:grow md:basis-0',
-            )}>
-                {/* TODO: Add functionality */}
-
-                <CurrentTrack currentSong={currentSong} />
+                <SecondaryControls volume={volume} />
 
                 <div className={clsx(
-                    'flex items-center gap-2',
-                    'md:hidden',
+                    'hidden flex-col justify-center items-center max-w-[500px]',
+                    'md:flex md:grow md:basis-0 ',
                 )}>
-                    <button onClick={toggleIsPlaying}>
-                        {isPlaying ? <PauseIcon className={'h-[25px]'} /> : <PlayIcon className={'h-[25px]'} />}
-                    </button>
+                    <Controls
+                        isPlaying={isPlaying}
+                        queue={queue}
+                        queueIdx={queueIdx}
+                        toggleIsPlaying={toggleIsPlaying}
+                    />
 
-                    <ForwardIcon className={'h-[25px]'} />
+                    <SeekBar
+                        duration={duration}
+                        currentTime={currentTime}
+                        audioRef={audioRef}
+                    />
+                </div>
+
+                <div
+                    className={clsx(
+                        'h-full flex justify-between min-w-0 w-full',
+                        'md:grow md:basis-0',
+                    )}
+                    onClick={() => {
+                        // TODO: Add menu
+                    }}
+                >
+                    {/* TODO: Add functionality */}
+                    <CurrentTrack currentSong={currentSong} />
+
+                    <div className={clsx(
+                        'flex items-center gap-2',
+                        'md:hidden',
+                    )}>
+                        <Link to={'/queue'}>
+                            <QueueIcon className={'h-[25px]'} />
+                        </Link>
+                        <button onClick={toggleIsPlaying}>
+                            {isPlaying ? <PauseIcon className={'h-[25px]'} /> : <PlayIcon className={'h-[25px]'} />}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

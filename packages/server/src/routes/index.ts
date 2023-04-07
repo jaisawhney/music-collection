@@ -7,7 +7,7 @@ import artists from './artists.js';
 
 const router = Router();
 
-// TODO: Form validation
+// TODO: Form/api validation
 router.use('/songs', songs);
 router.use('/albums', albums);
 router.use('/artists', artists);
